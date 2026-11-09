@@ -1,0 +1,18 @@
+.env
+.streamlit/secrets.toml
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+data/*.db
+.DS_Store
+
+# Locally downloaded public market data; re-download/update as needed
+data/mandi_prices.csv
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+*.log

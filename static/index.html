@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#fbf7ef" />
+  <title>NammaVaani – Your Farm Companion</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-wrap">
+        <button class="icon-button menu-button" id="menuButton" aria-label="Open menu">☰</button>
+        <div class="brand-mark" aria-hidden="true"><span>🌾</span></div>
+        <div class="brand-copy">
+          <div class="brand-line"><span class="brand-name">NammaVaani</span><span class="version-pill">Farm companion</span></div>
+          <div class="brand-subtitle">ನಮ್ಮವಾಣಿ · Your voice, your farm</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="village-pill"><span class="pin-dot">●</span><span id="headerLocation">Set your village</span></div>
+        <button class="avatar-button" id="profileShortcut" title="My Farm">👤</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="view active" id="talkView">
+        <section class="welcome-card">
+          <div class="eyebrow">NAMASKARA, FARMER</div>
+          <h1>Speak naturally.<br class="mobile-break"/> Your farm gets help.</h1>
+          <p>Ask about weather, crops, market prices, farm repairs or everyday work. NammaVaani listens and answers in your language.</p>
+          <div class="welcome-foot"><span class="sparkle">✦</span> Powered by Gnani voice AI</div>
+        </section>
+
+        <section class="language-card">
+          <div class="language-icon">◎</div>
+          <div class="language-copy">
+            <span class="field-label">YOUR LANGUAGE</span>
+            <strong id="languageName">Kannada</strong>
+          </div>
+          <select id="languageSelect" aria-label="Choose spoken language">
+            <option value="kn" selected>ಕನ್ನಡ · Kannada</option>
+            <option value="te">తెలుగు · Telugu</option>
+            <option value="ta">தமிழ் · Tamil (beta)</option>
+            <option value="hi">हिन्दी · Hindi (beta)</option>
+            <option value="ml">മലയാളം · Malayalam (beta)</option>
+            <option value="mr">मराठी · Marathi (beta)</option>
+            <option value="bn">বাংলা · Bengali (beta)</option>
+            <option value="gu">ગુજરાતી · Gujarati (beta)</option>
+            <option value="pa">ਪੰਜਾਬੀ · Punjabi (beta)</option>
+            <option value="en">English (India)</option>
+            <option value="auto" disabled>Auto detect · requires Prisma v3.0</option>
+          </select>
+          <p class="language-help" id="languageHelp">Choose the main language you will speak. English words can be mixed naturally; check important details.</p>
+        </section>
+
+        <section class="voice-stage" aria-label="Voice assistant">
+          <div class="mic-orbit orbit-one"></div>
+          <div class="mic-orbit orbit-two"></div>
+          <button class="mic-button" id="micButton" aria-label="Tap to record">
+            <span class="mic-core"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="12" rx="3"></rect><path d="M5.5 10.5v1.2a6.5 6.5 0 0 0 13 0v-1.2M12 18.2v3M8.5 21.2h7"></path></svg></span>
+            <span class="mic-label" id="micLabel">Tap to talk</span>
+          </button>
+          <div class="mic-status" id="micStatus"><span class="tiny-mic">🎙</span> ಮಾತನಾಡಲು ಒತ್ತಿ · Tap to start speaking</div>
+          <div class="recording-note" id="recordingNote">Tap the microphone again when you finish speaking.</div>
+          <div class="consent-row"><input type="checkbox" id="audioConsent"/><label for="audioConsent">I agree to send my recording to Gnani for speech recognition.</label></div>
+          <div class="model-strip"><span class="model-dot"></span> Prisma listens <span class="strip-divider">·</span> Timbre speaks</div>
+        </section>
+
+        <section class="result-card hidden" id="resultCard" aria-live="polite">
+          <div class="result-heading"><span class="result-icon">✦</span><div><span class="field-label">NAMMAVAANI REPLIED</span><h2>Your answer</h2></div><span class="intent-tag" id="intentTag">Assistant</span></div>
+          <div class="heard-block"><span class="field-label">YOU SAID</span><p id="transcriptText"></p><p class="micro-note" id="languageResultNote"></p></div>
+          <div class="answer-block"><p id="answerText"></p></div>
+          <div id="resultDetails"></div>
+          <div class="result-actions">
+            <button class="primary-small" id="playAnswerButton">▶ Listen to answer</button>
+            <button class="secondary-small" id="copyAnswerButton">Copy answer</button>
+          </div>
+          <audio id="answerAudio" controls class="answer-audio hidden"></audio>
+          <div class="source-line" id="sourceLine"></div>
+        </section>
+
+        <section class="type-fallback">
+          <button class="text-link" id="toggleType">⌨ Type instead</button>
+          <div class="typed-box hidden" id="typedBox">
+            <textarea id="typedQuestion" rows="2" placeholder="Example: What is the weather today? / ಇವತ್ತು ಹವಾಮಾನ ಹೇಗಿದೆ?"></textarea>
+            <button class="primary-small" id="sendTyped">Ask NammaVaani</button>
+            <p class="micro-note">Typed testing does not use Prisma speech recognition.</p>
+          </div>
+        </section>
+
+        <section class="ask-section">
+          <div class="section-heading"><div><span class="field-label">NEED AN IDEA?</span><h2>Farmers are asking</h2></div><span class="section-flower">✳</span></div>
+          <div class="question-grid">
+            <button class="question-chip" data-prompt="What is the weather today in Anekal?" data-lang="en"><span class="chip-icon weather-chip">☀</span><span><b>Today's weather</b><small>ನಾಳೆ ಮಳೆ ಬರುತ್ತಾ?</small></span><span class="chip-arrow">›</span></button>
+            <button class="question-chip" data-prompt="What is today's tomato price?" data-lang="en"><span class="chip-icon price-chip">₹</span><span><b>Tomato price</b><small>ಟೊಮೇಟೊ ಬೆಲೆ ಎಷ್ಟು?</small></span><span class="chip-arrow">›</span></button>
+            <button class="question-chip" data-prompt="My borewell motor is not working. Raise a repair complaint." data-lang="en"><span class="chip-icon repair-chip">🔧</span><span><b>Repair my motor</b><small>ಮೋಟಾರ್ ಕೆಲಸ ಮಾಡುತ್ತಿಲ್ಲ</small></span><span class="chip-arrow">›</span></button>
+            <button class="question-chip" data-prompt="Write a letter to the MRO asking for guidance about pesticides for my tomato crop." data-lang="en"><span class="chip-icon letter-chip">✉</span><span><b>Write a letter</b><small>ಅಧಿಕಾರಿಗೆ ಪತ್ರ ಬರೆಯಿರಿ</small></span><span class="chip-arrow">›</span></button>
+          </div>
+        </section>
+
+        <section class="recent-section">
+          <div class="section-heading"><div><span class="field-label">YOUR ACTIVITY</span><h2>Recent conversations</h2></div><button class="text-link" id="viewHistory">View all</button></div>
+          <div class="recent-list" id="recentList"><div class="empty-recent"><span>💬</span><p>Your questions and answers will appear here.</p></div></div>
+        </section>
+      </section>
+
+      <section class="view" id="farmView">
+        <section class="page-heading"><span class="field-label">YOUR FARM DETAILS</span><h1>My Farm 🌱</h1><p>Save these details once. NammaVaani will remember them for future conversations.</p></section>
+        <form class="farm-form" id="farmForm">
+          <p class="form-intro">Tell us where your farm is. You can fill only what you know and change it later.</p>
+          <label>State<input name="state" id="farmState" list="indiaStates" placeholder="Example: Karnataka" value="Karnataka" /></label>
+          <label>District<input name="district" id="farmDistrict" placeholder="Example: Bengaluru Urban" /></label>
+          <label>Taluk / Mandal<input name="taluk" id="farmTaluk" placeholder="Example: Anekal" /></label>
+          <label>Hobli / revenue circle<input name="hobli" id="farmHobli" placeholder="Example: Attibele" /></label>
+          <label>Village / town<input name="village" id="farmLocation" placeholder="Example: Bidaraguppe" /></label>
+          <datalist id="indiaStates"><option>Karnataka</option><option>Andhra Pradesh</option><option>Telangana</option><option>Tamil Nadu</option><option>Kerala</option><option>Maharashtra</option><option>Goa</option><option>Other</option></datalist>
+          <div class="gps-box">
+            <label class="gps-consent"><input type="checkbox" id="farmGpsConsent" /> I agree to save my farm's GPS location (optional).</label>
+            <button class="secondary-small" type="button" id="getFarmGps" disabled>Use my current location</button>
+            <small id="gpsFeedback">GPS is off. Your location will not be accessed unless you opt in and press the button.</small>
+            <input type="hidden" id="farmLatitude" /><input type="hidden" id="farmLongitude" />
+          </div>
+          <label>Land size (acres)<input type="number" name="land_acres" id="farmLand" min="0" step="0.25" placeholder="Example: 2" /></label>
+          <label>Soil type<select name="soil_type" id="farmSoil"><option value="Unknown">I don't know</option><option value="Red soil">Red soil</option><option value="Black soil">Black soil</option><option value="Sandy soil">Sandy soil</option><option value="Lateritic soil">Lateritic soil</option><option value="Alluvial soil">Alluvial soil</option></select></label>
+          <label>Water source<select name="irrigation" id="farmWater"><option value="Unknown">I don't know</option><option value="Borewell">Borewell</option><option value="Canal / tank">Canal / tank</option><option value="Rainfed">Rain only</option><option value="Drip irrigation">Drip irrigation</option></select></label>
+          <label>Current crop<input name="current_crop" id="farmCrop" placeholder="Example: Ragi, tomato" /></label>
+          <button class="primary-wide" type="submit">Save my farm details</button>
+          <p class="form-feedback" id="farmFeedback"></p>
+        </form>
+      </section>
+
+      <section class="view" id="activityView">
+        <section class="page-heading"><span class="field-label">YOUR ACTIVITY</span><h1>My conversations</h1><p>Review what you asked and what NammaVaani answered.</p></section>
+        <div class="history-page-list" id="historyPageList"></div>
+        <div class="ticket-section"><div class="section-heading"><div><span class="field-label">FARM SERVICES</span><h2>Repair requests</h2></div></div><div id="ticketList" class="ticket-list"></div></div>
+      </section>
+
+      <section class="view" id="settingsView">
+        <section class="page-heading"><span class="field-label">PREFERENCES</span><h1>Settings</h1><p>Manage language, market data and voice services.</p></section>
+        <div class="settings-card"><div class="settings-icon">🌐</div><div class="settings-copy"><b>Spoken language</b><small>Choose the language you will speak. Ten speech locales are available; complete built-in farming replies are available in Kannada, Telugu and English. Additional languages can use the optional translation bridge.</small></div><select id="settingsLanguage">
+          <option value="kn">ಕನ್ನಡ · Kannada</option><option value="te">తెలుగు · Telugu</option><option value="ta">தமிழ் · Tamil (beta)</option><option value="hi">हिन्दी · Hindi (beta)</option><option value="ml">മലയാളം · Malayalam (beta)</option><option value="mr">मराठी · Marathi (beta)</option><option value="bn">বাংলা · Bengali (beta)</option><option value="gu">ગુજરાતી · Gujarati (beta)</option><option value="pa">ਪੰਜਾਬੀ · Punjabi (beta)</option><option value="en">English (India)</option><option value="auto" disabled>Auto detect · requires Prisma v3.0</option>
+        </select></div>
+        <div class="settings-card upload-card"><div class="settings-icon">📊</div><div class="settings-copy"><b>Mandi price data</b><small>Automatic government API lookup is tried first when configured. The official Agmarknet CSV is the backup. Every result shows its actual observation date.</small></div><input type="file" id="mandiFile" accept=".csv,text/csv"/><button class="secondary-small" id="uploadMandi">Upload CSV</button><p id="uploadFeedback" class="form-feedback"></p><p id="mandiSourceStatus" class="micro-note">Checking mandi data source…</p></div>
+        <div class="settings-card"><div class="settings-icon">🎙</div><div class="settings-copy"><b>Gnani voice services</b><small>Prisma speech recognition and Timbre voice generation.</small></div><span class="status-pill" id="gnaniStatus">Checking…</span></div>
+        <div class="settings-card upload-card"><div class="settings-icon">🔊</div><div class="settings-copy"><b>Test real Gnani Timbre</b><small>Sends one short Kannada/Telugu/selected-language test to Gnani. A successful call may consume programme credits.</small></div><button class="secondary-small" id="testTimbreButton">Test Timbre</button><p id="testTimbreFeedback" class="form-feedback"></p></div>
+        <div class="privacy-note"><b>Privacy</b><p>Your voice is sent to Gnani only after you agree and record. Avoid sharing bank details, passwords or Aadhaar numbers. This prototype stores a local farmer profile and local service tickets. API status shows whether a key is present; only a successful test request proves that Gnani accepted it.</p></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button class="nav-item active" data-view="talkView"><span>🎙</span><small>Talk</small></button>
+      <button class="nav-item" data-view="farmView"><span>🌱</span><small>My Farm</small></button>
+      <button class="nav-item" data-view="activityView"><span>▤</span><small>Activity</small></button>
+      <button class="nav-item" data-view="settingsView"><span>⚙</span><small>Settings</small></button>
+    </nav>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
