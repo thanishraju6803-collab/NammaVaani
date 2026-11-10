@@ -2,6 +2,14 @@
 
 **Speak naturally. NammaVaani listens, understands, checks trusted information and answers aloud.**
 
+## 🚀 Live Demo
+
+Try NammaVaani here:
+
+https://nammavaani.onrender.com
+
+
+
 This project includes a redesigned responsive web interface inspired by the simple voice-note layout shared by the user: a warm background, language control, one large central microphone, example farmer questions, recent conversations and a small bottom navigation. The original Streamlit prototype is retained as `app.py`; the recommended new interface runs through FastAPI and the browser's microphone.
 
 ## Core experience
